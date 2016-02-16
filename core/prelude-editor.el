@@ -442,16 +442,15 @@ and file 'filename' will be opened and cursor set on line 'linenumber'"
 (defconst monitor-width (nth 3 monitor-geoinfo))
 (defconst monitor-height (nth 4 monitor-geoinfo))
 ;; set variables and functions to save and restore frame info
-(defvar frame-width-record 87)
-(defvar frame-height-record 47)
+(defvar frame-width-record 83)
+(defvar frame-height-record 43)
 ;; alternative fonts :
 ;; 1. Source Code Pro
-;; 2. Menlo
+;; 2. Menlo (Default)
 ;; 3. Courier
 ;; 4. Andale Mono
 ;; 5. Monaco
 ;; 6. Consolas
-;; 7. Dejavu Sans Mono (default)
 (defvar frame-font-record
   (if (> monitor-width 1920)
       "Dejavu Sans Mono 15"
@@ -464,24 +463,16 @@ and file 'filename' will be opened and cursor set on line 'linenumber'"
         (frame-parameter (selected-frame) 'font)))
 (defun restore-frame-setting (f)
   "Restore frame setting from records to current frame F."
-  (set-frame-size f frame-width-record frame-height-record nil)
+  (set-frame-size f frame-width-record frame-height-record)
   (set-frame-font frame-font-record nil (list f)))
 ;; save frame info before frame closed
 (add-hook 'delete-frame-functions 'save-frame-setting)
 (add-hook 'after-make-frame-functions 'restore-frame-setting)
-;; set frame font and size
-;; (set-frame-font frame-font-record)
-;; (setq default-frame-alist
-;;       '((width  . frame-width-record)
-;;         (height . frame-height-record)))
-;; (set-frame-font frame-font-record)
 
 ;; Edit as Root User
 (defun sudo-edit (&optional arg)
-
   "Edit currently visited file as root.
 Without ARG interactive prompt would appear."
-
   (interactive "P")
   (if (or arg (not buffer-file-name))
       (find-file (concat "/sudo:root@localhost:"
