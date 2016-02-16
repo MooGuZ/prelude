@@ -37,6 +37,12 @@
 (global-set-key "\C-ca" 'org-agenda)
 (global-set-key "\C-cb" 'org-iswitchb)
 (setq org-log-done t)
+(setq org-log-mode 'time)
+(setq org-startup-indended t)
+
+(setq org-agenda-files (list "~/Dropbox/Record/general.org"
+                             "~/Dropbox/Record/research.org"
+                             "~/Dropbox/Record/dev.org"))
 
 (defun prelude-org-mode-defaults ()
   (let ((oldmap (cdr (assoc 'prelude-mode minor-mode-map-alist)))

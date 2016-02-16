@@ -52,10 +52,13 @@
 (delete-selection-mode t)
 
 ;; store all backup and autosave files in the tmp dir
+(defconst emacs-temporary-dir
+  (format "%s%s-%s/" temporary-file-directory "Emacs" (user-login-name)))
 (setq backup-directory-alist
-      `((".*" . ,temporary-file-directory)))
-(setq auto-save-file-name-transforms
-      `((".*" ,temporary-file-directory t)))
+      `((".*" . ,emacs-temporary-dir)))
+(add-to-list 'auto-save-file-name-transforms
+             `(".*" ,emacs-temporary-dir t))
+(setq auto-save-list-file-prefix emacs-temporary-dir)
 
 ;; autosave the undo-tree history
 (setq undo-tree-history-directory-alist
@@ -432,6 +435,35 @@ and file 'filename' will be opened and cursor set on line 'linenumber'"
                                (cons (string-to-number (match-string 2 name))
                                      (string-to-number (or (match-string 3 name) ""))))
                             fn))) files)))
+
+;; get monitor info
+(defvar monitor-geoinfo
+  (assq 'geometry (car (display-monitor-attributes-list))))
+(defconst monitor-width (nth 3 monitor-geoinfo))
+(defconst monitor-height (nth 4 monitor-geoinfo))
+;; set frame font
+(if (> monitor-width 2000)
+    (set-frame-font "Menlo 15")
+  (set-frame-font "Menlo 13"))
+;; set frame size
+(setq default-frame-alist
+      '((width . 87) (height . 47)))
+
+;; Edit as Root User
+(defun sudo-edit (&optional arg)
+
+  "Edit currently visited file as root.
+Without ARG interactive prompt would appear."
+
+  (interactive "P")
+  (if (or arg (not buffer-file-name))
+      (find-file (concat "/sudo:root@localhost:"
+			 (read-file-name "Find file(as root) :")))
+    (if (file-writable-p buffer-file-name)
+	(message "[sudo-edit] : current file is already writable.")
+      (find-alternate-file (concat "/sudo:root@localhost:" buffer-file-name)))))
+(global-set-key (kbd "C-c C-w") 'sudo-edit)
+
 
 (provide 'prelude-editor)
 

@@ -70,6 +70,9 @@ Windows external keyboard from time to time."
 (if (fboundp 'set-fontset-font)
     (set-fontset-font t 'unicode "Apple Color Emoji" nil 'prepend))
 
+;; set url browser
+(setq browse-url-browser-function
+      'browse-url-generic browse-url-generic-program "open")
 
 (provide 'prelude-osx)
 ;;; prelude-osx.el ends here

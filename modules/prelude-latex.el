@@ -37,6 +37,9 @@
 ;; for case
 (require 'cl)
 
+;; setup binary file path
+(add-to-list 'exec-path "/Library/TeX/texbin/")
+
 (eval-after-load "company"
   '(progn
      (prelude-require-packages '(company-auctex))

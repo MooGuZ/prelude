@@ -59,6 +59,11 @@
 
 (setq prelude-interactive-lisp-coding-hook 'prelude-interactive-lisp-coding-defaults)
 
+;; ------- CLisp -------
+(require 'slime)
+(setq inferior-lisp-program "/usr/local/bin/ccl")
+(setq slime-contribs '(slime-fancy))
+
 (provide 'prelude-lisp)
 
 ;;; prelude-lisp.el ends here

@@ -499,5 +499,8 @@ With a prefix argument ARG, find the `user-init-file' instead."
      (interactive "P")
      (sp-wrap-with-pair ,s)))
 
+;; suppress warning of environment variables
+(setq exec-path-from-shell-arguments '("-l"))
+
 (provide 'prelude-core)
 ;;; prelude-core.el ends here
