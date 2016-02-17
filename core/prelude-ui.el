@@ -84,5 +84,53 @@
 (require 'beacon)
 (beacon-mode +1)
 
+;;; Customized Code:
+
+;; frame setting save and restore in daemon mode
+(defvar frame-width-record  83)
+(defvar frame-height-record 43)
+(defvar frame-font-record  nil)
+
+(defun save-frame-setting (&optional f)
+  "Save current frame (F) info into pre-defined variables."
+  (setq frame-width-record (frame-width))
+  (setq frame-height-record (frame-height))
+  (setq frame-font-record
+        (frame-parameter (selected-frame) 'font)))
+
+(defun restore-frame-setting (f)
+  "Restore frame setting from records to current frame F."
+  (set-frame-size f frame-width-record frame-height-record)
+  (set-frame-font frame-font-record nil (list f)))
+
+(add-hook 'delete-frame-functions 'save-frame-setting)
+(add-hook 'after-make-frame-functions 'restore-frame-setting)
+
+;; initialize frame setting in daemon mode
+(defun monitor-geoinfo (d)
+  "Fetch geometry information of display D."
+  (assq 'geometry (car (display-monitor-attributes-list d))))
+
+(defun set-frame-font-acrd-display (d)
+  "Set frame font according to display (D) resolution."
+  (unless frame-font-record
+    (setq frame-font-record
+          (if (> (nth 3 (monitor-geoinfo d)) 1920)
+              "Source Code Pro 15"
+            "Menlo 14"))))
+;; NOTE: the hook below have to be added after hook of 'restore-frame-setting'
+(add-hook 'after-make-frame-functions 'set-frame-font-acrd-display)
+
+;; initialize frame setting in non-daemon mode
+(setq default-frame-alist '((width  . 83) (height . 43)))
+;; alternative fonts :
+;; 1. Source Code Pro
+;; 2. Menlo (Default)
+;; 3. Courier
+;; 4. Andale Mono
+;; 5. Monaco
+;; 6. Consolas
+(set-frame-font "Menlo 14")
+
 (provide 'prelude-ui)
 ;;; prelude-ui.el ends here
