@@ -86,50 +86,15 @@
 
 ;;; Customized Code:
 
-;; frame setting save and restore in daemon mode
-(defvar frame-width-record  83)
-(defvar frame-height-record 43)
-(defvar frame-font-record  nil)
-(defvar frame-left-record   47)
-(defvar frame-top-record    23)
-
-(defun save-frame-setting (&optional f)
-  "Save current frame (F) info into pre-defined variables."
-  (setq frame-width-record (frame-width))
-  (setq frame-height-record (frame-height))
-  (setq frame-font-record
-        (frame-parameter (selected-frame) 'font))
-  (setq frame-left-record
-        (frame-parameter (selected-frame) 'left))
-  (setq frame-top-record
-        (frame-parameter (selected-frame) 'top)))
-
-(defun restore-frame-setting (f)
-  "Restore frame setting from records to current frame F."
-  (set-frame-size f frame-width-record frame-height-record)
-  (set-frame-font frame-font-record nil (list f))
-  (set-frame-position (selected-frame) frame-left-record frame-top-record))
-
-(add-hook 'delete-frame-functions 'save-frame-setting)
-(add-hook 'after-make-frame-functions 'restore-frame-setting)
-
-;; initialize frame setting in daemon mode
-(defun monitor-geoinfo (d)
-  "Fetch geometry information of display D."
-  (assq 'geometry (car (display-monitor-attributes-list d))))
-
-(defun set-frame-font-acrd-display (d)
-  "Set frame font according to display (D) resolution."
-  (unless frame-font-record
-    (setq frame-font-record
-          (if (> (nth 3 (monitor-geoinfo d)) 1920)
-              "Source Code Pro 15"
-            "Menlo 14"))))
-;; NOTE: the hook below have to be added after hook of 'restore-frame-setting'
-(add-hook 'after-make-frame-functions 'set-frame-font-acrd-display)
-
-;; initialize frame setting in non-daemon mode
-(setq default-frame-alist '((width  . 83) (height . 43)))
+;; setup default value of frame properties
+(defconst display-info
+  (car (display-monitor-attributes-list (car (last (terminal-list))))))
+(defvar default-frame-left
+  (nth 1 (assoc 'workarea display-info)))
+(defvar default-frame-top
+  (nth 2 (assoc 'workarea display-info)))
+(defvar default-frame-width  83)
+(defvar default-frame-height 43)
 ;; alternative fonts :
 ;; 1. Source Code Pro
 ;; 2. Menlo (Default)
@@ -137,7 +102,43 @@
 ;; 4. Andale Mono
 ;; 5. Monaco
 ;; 6. Consolas
-(set-frame-font "Menlo 14")
+(defvar default-frame-font
+  (if (> (nth 3 (assoc 'geometry display-info)) 1920)
+      "Source Code Pro 15" "Menlo 14"))
+
+;; assistant function to modify associate list
+(defun modify-alist (alist id update)
+  "Modify item in ALIST, which has key ID, to a new value UPDATE."
+  (setf (cdr (assoc id alist)) update)
+  alist)
+
+;; initialize settings for MAKE-FRAME
+(add-to-list 'default-frame-alist (cons 'left   default-frame-left))
+(add-to-list 'default-frame-alist (cons 'top    default-frame-top))
+(add-to-list 'default-frame-alist (cons 'width  default-frame-width))
+(add-to-list 'default-frame-alist (cons 'height default-frame-height))
+(add-to-list 'default-frame-alist (cons 'font   default-frame-font))
+
+;; update settings of MAKE-FRAME when close current frame
+(defun update-frame-setting (frame)
+  "Update settings of 'make-frame' by settings of FRAME."
+  (modify-alist default-frame-alist 'left   (frame-parameter frame 'left))
+  (modify-alist default-frame-alist 'top    (frame-parameter frame 'top))
+  (modify-alist default-frame-alist 'font   (frame-parameter frame 'font))
+  (modify-alist default-frame-alist 'width  (frame-width frame))
+  (modify-alist default-frame-alist 'height (frame-height frame)))
+(add-hook 'delete-frame-functions 'update-frame-setting)
+
+;; recover frame setting if there are multiple monitors. In this case
+;; if last frame didn't located in main monitor. 'make-frame' cannot
+;; create a frame in the position according to the recorded setting.
+(defun recover-frame-setting (frame)
+  "Move FRAME to the position in default settings in case of multiple monitors."
+  (when (or (listp (cdr (assoc 'top  default-frame-alist)))
+            (listp (cdr (assoc 'left default-frame-alist))))
+    (modify-frame-parameters frame default-frame-alist)
+    (print "applied recover-frame-setting")))
+(add-hook 'after-make-frame-functions 'recover-frame-setting)
 
 (provide 'prelude-ui)
 ;;; prelude-ui.el ends here
