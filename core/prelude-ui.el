@@ -108,7 +108,7 @@
   "Restore frame setting from records to current frame F."
   (set-frame-size f frame-width-record frame-height-record)
   (set-frame-font frame-font-record nil (list f))
-  (set-frame-position ))
+  (set-frame-position (selected-frame) frame-left-record frame-top-record))
 
 (add-hook 'delete-frame-functions 'save-frame-setting)
 (add-hook 'after-make-frame-functions 'restore-frame-setting)
