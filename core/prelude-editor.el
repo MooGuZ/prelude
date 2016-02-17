@@ -437,10 +437,15 @@ and file 'filename' will be opened and cursor set on line 'linenumber'"
                             fn))) files)))
 
 ;; get monitor info
-(defvar monitor-geoinfo
+(defun monitor-geoinfo ()
+  "Get geometry info of current monitor."
   (assq 'geometry (car (display-monitor-attributes-list))))
-(defconst monitor-width (nth 3 monitor-geoinfo))
-(defconst monitor-height (nth 4 monitor-geoinfo))
+(defun monitor-width ()
+  "Get monitor width in pixel."
+  (nth 3 (assq 'geometry (car (display-monitor-attributes-list)))))
+(defun monitor-height ()
+  "Get monitor height in pixel."
+  (nth 4 (monitor-geoinfo)))
 ;; set variables and functions to save and restore frame info
 (defvar frame-width-record 83)
 (defvar frame-height-record 43)
@@ -452,9 +457,9 @@ and file 'filename' will be opened and cursor set on line 'linenumber'"
 ;; 5. Monaco
 ;; 6. Consolas
 (defvar frame-font-record
-  (if (> monitor-width 1920)
-      "Dejavu Sans Mono 15"
-    "Dejavu Sans Mono 13"))
+  (if (> (monitor-width) 1920)
+      "Menlo 15"
+    "Menlo 13"))
 (defun save-frame-setting (&optional f)
   "Save current frame (F) info into pre-defined variables."
   (setq frame-width-record (frame-width))
