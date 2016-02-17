@@ -37,16 +37,11 @@
 (global-set-key "\C-ca" 'org-agenda)
 (global-set-key "\C-cb" 'org-iswitchb)
 (setq org-log-done t)
-(setq org-log-mode 'time)
-(setq org-startup-indented t)
-
-(setq org-agenda-files (list "~/Dropbox/Record/general.org"
-                             "~/Dropbox/Record/research.org"
-                             "~/Dropbox/Record/dev.org"))
 
 (defun prelude-org-mode-defaults ()
   (let ((oldmap (cdr (assoc 'prelude-mode minor-mode-map-alist)))
         (newmap (make-sparse-keymap)))
+    (turn-on-auto-fill) ; custom code
     (set-keymap-parent newmap oldmap)
     (define-key newmap (kbd "C-c +") nil)
     (define-key newmap (kbd "C-c -") nil)
@@ -57,6 +52,14 @@
 (setq prelude-org-mode-hook 'prelude-org-mode-defaults)
 
 (add-hook 'org-mode-hook (lambda () (run-hooks 'prelude-org-mode-hook)))
+
+;;; Custom Code:
+(setq org-log-mode 'time)
+(setq org-startup-indented t)
+(setq org-startup-truncated nil)
+(setq org-agenda-files (list "~/Dropbox/Record/general.org"
+                             "~/Dropbox/Record/research.org"
+                             "~/Dropbox/Record/dev.org"))
 
 (provide 'prelude-org)
 

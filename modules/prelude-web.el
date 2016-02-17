@@ -72,5 +72,9 @@
      (add-hook 'web-mode-hook (lambda ()
                                 (run-hooks 'prelude-web-mode-hook)))))
 
+;;; Custom Code:
+
+(setq web-mode-enable-auto-closing t)
+
 (provide 'prelude-web)
 ;;; prelude-web.el ends here

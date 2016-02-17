@@ -436,6 +436,11 @@ and file 'filename' will be opened and cursor set on line 'linenumber'"
                                      (string-to-number (or (match-string 3 name) ""))))
                             fn))) files)))
 
+;;; Custom Code:
+
+;; auto fill after specified column
+(setq fill-column 80)
+
 ;; Edit as Root User
 (defun sudo-edit (&optional arg)
   "Edit currently visited file as root.
