@@ -1,0 +1,23 @@
+#!/bin/bash
+
+# define applications
+e="/Applications/Emacs.app/Contents/MacOS/Emacs"
+ec="/Applications/Emacs.app/Contents/MacOS/bin/emacsclient"
+
+# check existance of Emacs daemon, if not create one
+if [ $(ps -A | grep -c -e "Emacs\.app.*daemon") -le 0 ]; then
+    $e --daemon > /dev/null 2>&1
+fi
+
+# edit specified file by existing frames, if none exist
+# create a new one.
+if [ $($ec -e '(length (frame-list))') -gt 1 ]; then
+    if [ $# -eq 0 ]; then
+        $ec -n -e "(x-focus-frame nil)" > /dev/null 2>&1
+    else
+        $ec -n $@
+    fi
+else
+    $ec -nc $@
+fi
+       

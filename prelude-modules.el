@@ -13,6 +13,7 @@
 
 (require 'prelude-c)
 (require 'prelude-js)
+(require 'prelude-web)
 (require 'prelude-lisp)
 (require 'prelude-python)
 (require 'prelude-matlab)

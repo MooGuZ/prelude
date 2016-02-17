@@ -437,24 +437,47 @@ and file 'filename' will be opened and cursor set on line 'linenumber'"
                             fn))) files)))
 
 ;; get monitor info
-(defvar monitor-geoinfo
+(defun monitor-geoinfo ()
+  "Get geometry info of current monitor."
   (assq 'geometry (car (display-monitor-attributes-list))))
-(defconst monitor-width (nth 3 monitor-geoinfo))
-(defconst monitor-height (nth 4 monitor-geoinfo))
-;; set frame font
-(if (> monitor-width 2000)
-    (set-frame-font "Menlo 15")
-  (set-frame-font "Menlo 13"))
-;; set frame size
-(setq default-frame-alist
-      '((width . 87) (height . 47)))
+(defun monitor-width ()
+  "Get monitor width in pixel."
+  (nth 3 (assq 'geometry (car (display-monitor-attributes-list)))))
+(defun monitor-height ()
+  "Get monitor height in pixel."
+  (nth 4 (monitor-geoinfo)))
+;; set variables and functions to save and restore frame info
+(defvar frame-width-record 83)
+(defvar frame-height-record 43)
+;; alternative fonts :
+;; 1. Source Code Pro
+;; 2. Menlo (Default)
+;; 3. Courier
+;; 4. Andale Mono
+;; 5. Monaco
+;; 6. Consolas
+(defvar frame-font-record
+  (if (> (monitor-width) 1920)
+      "Menlo 15"
+    "Menlo 13"))
+(defun save-frame-setting (&optional f)
+  "Save current frame (F) info into pre-defined variables."
+  (setq frame-width-record (frame-width))
+  (setq frame-height-record (frame-height))
+  (setq frame-font-record
+        (frame-parameter (selected-frame) 'font)))
+(defun restore-frame-setting (f)
+  "Restore frame setting from records to current frame F."
+  (set-frame-size f frame-width-record frame-height-record)
+  (set-frame-font frame-font-record nil (list f)))
+;; save frame info before frame closed
+(add-hook 'delete-frame-functions 'save-frame-setting)
+(add-hook 'after-make-frame-functions 'restore-frame-setting)
 
 ;; Edit as Root User
 (defun sudo-edit (&optional arg)
-
   "Edit currently visited file as root.
 Without ARG interactive prompt would appear."
-
   (interactive "P")
   (if (or arg (not buffer-file-name))
       (find-file (concat "/sudo:root@localhost:"
@@ -464,9 +487,10 @@ Without ARG interactive prompt would appear."
       (find-alternate-file (concat "/sudo:root@localhost:" buffer-file-name)))))
 (global-set-key (kbd "C-c C-w") 'sudo-edit)
 
-;; shell mode
-(autoload 'ansi-color-for-comint-mode-on "ansi-color" nil t)
+;; set up shell environment
 (add-hook 'shell-mode-hook 'ansi-color-for-comint-mode-on)
+(add-to-list 'comint-output-filter-functions 'ansi-color-process-output)
+
 
 (provide 'prelude-editor)
 
