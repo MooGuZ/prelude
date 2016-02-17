@@ -38,7 +38,7 @@
 (global-set-key "\C-cb" 'org-iswitchb)
 (setq org-log-done t)
 (setq org-log-mode 'time)
-(setq org-startup-indended t)
+(setq org-startup-indented t)
 
 (setq org-agenda-files (list "~/Dropbox/Record/general.org"
                              "~/Dropbox/Record/research.org"
