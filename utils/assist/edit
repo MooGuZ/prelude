@@ -11,7 +11,7 @@ fi
 
 # edit specified file by existing frames, if none exist
 # create a new one.
-if [ $($ec -e '(length (frame-list))') -gt 1 ]; then
+if [ $($ec -e "(length (frame-list))") -gt 1 ]; then
     if [ $# -eq 0 ]; then
         $ec -n -e "(x-focus-frame nil)" > /dev/null 2>&1
     else
@@ -19,5 +19,5 @@ if [ $($ec -e '(length (frame-list))') -gt 1 ]; then
     fi
 else
     $ec -nc $@
+    $ec -n -e "(x-focus-frame nil)" > /dev/null 2>&1
 fi
-       

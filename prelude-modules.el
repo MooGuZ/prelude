@@ -8,6 +8,7 @@
 
 (require 'prelude-ido)
 (require 'prelude-org)
+(require 'prelude-latex)
 
 (require 'prelude-emacs-lisp)
 
@@ -19,7 +20,5 @@
 (require 'prelude-matlab)
 
 (require 'prelude-xml)
-
-(require 'prelude-latex)
 
 ;; END

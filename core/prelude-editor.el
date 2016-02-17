@@ -437,29 +437,20 @@ and file 'filename' will be opened and cursor set on line 'linenumber'"
                             fn))) files)))
 
 ;; get monitor info
-(defun monitor-geoinfo ()
-  "Get geometry info of current monitor."
-  (assq 'geometry (car (display-monitor-attributes-list))))
-(defun monitor-width ()
-  "Get monitor width in pixel."
-  (nth 3 (assq 'geometry (car (display-monitor-attributes-list)))))
-(defun monitor-height ()
-  "Get monitor height in pixel."
-  (nth 4 (monitor-geoinfo)))
+(defun monitor-geoinfo (d)
+  "Fetch geometry information of display D."
+  (assq 'geometry (car (display-monitor-attributes-list d))))
 ;; set variables and functions to save and restore frame info
-(defvar frame-width-record 83)
+(defvar frame-width-record  83)
 (defvar frame-height-record 43)
-;; alternative fonts :
-;; 1. Source Code Pro
-;; 2. Menlo (Default)
-;; 3. Courier
-;; 4. Andale Mono
-;; 5. Monaco
-;; 6. Consolas
-(defvar frame-font-record
-  (if (> (monitor-width) 1920)
-      "Menlo 15"
-    "Menlo 13"))
+(defvar frame-font-record  nil)
+(defun set-frame-font-acrd-display (d)
+  "Set frame font according to display (D) resolution."
+  (unless frame-font-record
+    (setq frame-font-record
+          (if (> (nth 3 (monitor-geoinfo d)) 1920)
+              "Source Code Pro 15"
+            "Menlo 14"))))
 (defun save-frame-setting (&optional f)
   "Save current frame (F) info into pre-defined variables."
   (setq frame-width-record (frame-width))
@@ -473,6 +464,20 @@ and file 'filename' will be opened and cursor set on line 'linenumber'"
 ;; save frame info before frame closed
 (add-hook 'delete-frame-functions 'save-frame-setting)
 (add-hook 'after-make-frame-functions 'restore-frame-setting)
+(add-hook 'after-make-frame-functions 'set-frame-font-acrd-display)
+;; (add-hook 'before-make-frame-hook 'set-frame-font-acrd-display)
+;; default frame settings (this is for running Emacs in non-daemon mode)
+(setq default-frame-alist '((width  . 83) (height . 43)))
+;; alternative fonts :
+;; 1. Source Code Pro
+;; 2. Menlo (Default)
+;; 3. Courier
+;; 4. Andale Mono
+;; 5. Monaco
+;; 6. Consolas
+(set-frame-font "Menlo 14")
+
+
 
 ;; Edit as Root User
 (defun sudo-edit (&optional arg)
