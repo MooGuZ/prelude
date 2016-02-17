@@ -87,24 +87,12 @@
 ;;; Customized Code:
 
 ;; setup default value of frame properties
-(defconst display-info
-  (car (display-monitor-attributes-list (car (last (terminal-list))))))
-(defvar default-frame-left
-  (nth 1 (assoc 'workarea display-info)))
-(defvar default-frame-top
-  (nth 2 (assoc 'workarea display-info)))
+(defvar display-info)
+(defvar default-frame-left)
+(defvar default-frame-top)
 (defvar default-frame-width  83)
 (defvar default-frame-height 43)
-;; alternative fonts :
-;; 1. Source Code Pro
-;; 2. Menlo (Default)
-;; 3. Courier
-;; 4. Andale Mono
-;; 5. Monaco
-;; 6. Consolas
-(defvar default-frame-font
-  (if (> (nth 3 (assoc 'geometry display-info)) 1920)
-      "Source Code Pro 15" "Menlo 14"))
+(defvar default-frame-font)
 
 ;; assistant function to modify associate list
 (defun modify-alist (alist id update)
@@ -113,11 +101,31 @@
   alist)
 
 ;; initialize settings for MAKE-FRAME
-(add-to-list 'default-frame-alist (cons 'left   default-frame-left))
-(add-to-list 'default-frame-alist (cons 'top    default-frame-top))
-(add-to-list 'default-frame-alist (cons 'width  default-frame-width))
-(add-to-list 'default-frame-alist (cons 'height default-frame-height))
-(add-to-list 'default-frame-alist (cons 'font   default-frame-font))
+(defun initialize-frame-setting ()
+  "Initialize frame setting after window setup."
+  (setq display-info
+    (car (display-monitor-attributes-list (car (last (terminal-list))))))
+  (setq default-frame-left
+    (nth 1 (assoc 'workarea display-info)))
+  (setq default-frame-top
+    (nth 2 (assoc 'workarea display-info)))
+  ;; alternative fonts :
+  ;; 1. Source Code Pro
+  ;; 2. Menlo (Default)
+  ;; 3. Courier
+  ;; 4. Andale Mono
+  ;; 5. Monaco
+  ;; 6. Consolas
+  (setq default-frame-font
+    (if (> (nth 3 (assoc 'geometry display-info)) 1920)
+        "Source Code Pro 16" "Menlo 14"))
+  (add-to-list 'default-frame-alist (cons 'left   default-frame-left))
+  (add-to-list 'default-frame-alist (cons 'top    default-frame-top))
+  (add-to-list 'default-frame-alist (cons 'width  default-frame-width))
+  (add-to-list 'default-frame-alist (cons 'height default-frame-height))
+  (add-to-list 'default-frame-alist (cons 'font   default-frame-font))
+  (remove-hook 'before-make-frame-hook 'initialize-frame-setting))
+(add-hook 'before-make-frame-hook 'initialize-frame-setting)
 
 ;; update settings of MAKE-FRAME when close current frame
 (defun update-frame-setting (frame)
