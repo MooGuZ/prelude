@@ -90,18 +90,25 @@
 (defvar frame-width-record  83)
 (defvar frame-height-record 43)
 (defvar frame-font-record  nil)
+(defvar frame-left-record   47)
+(defvar frame-top-record    23)
 
 (defun save-frame-setting (&optional f)
   "Save current frame (F) info into pre-defined variables."
   (setq frame-width-record (frame-width))
   (setq frame-height-record (frame-height))
   (setq frame-font-record
-        (frame-parameter (selected-frame) 'font)))
+        (frame-parameter (selected-frame) 'font))
+  (setq frame-left-record
+        (frame-parameter (selected-frame) 'left))
+  (setq frame-top-record
+        (frame-parameter (selected-frame) 'top)))
 
 (defun restore-frame-setting (f)
   "Restore frame setting from records to current frame F."
   (set-frame-size f frame-width-record frame-height-record)
-  (set-frame-font frame-font-record nil (list f)))
+  (set-frame-font frame-font-record nil (list f))
+  (set-frame-position ))
 
 (add-hook 'delete-frame-functions 'save-frame-setting)
 (add-hook 'after-make-frame-functions 'restore-frame-setting)
