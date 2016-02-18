@@ -34,7 +34,7 @@
 (setq matlab-shell-command "matlab")
 (setq matlab-shell-command-switches '("-nodisplay"))
 ;; default settings
-(defun maltab-mode-default ()
+(defun matlab-mode-default ()
   "Apply default settings of matlab mode."
   (turn-on-auto-fill)
   (setq fill-column 120)
