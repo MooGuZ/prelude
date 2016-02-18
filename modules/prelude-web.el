@@ -66,15 +66,18 @@
 
 (eval-after-load 'web-mode
   '(progn
-     (defun prelude-web-mode-defaults ())
+     (defun prelude-web-mode-defaults ()
+       (turn-on-auto-fill)              ; custom code
+       (setq fill-column 87)
+       (linum-on))
      (setq prelude-web-mode-hook 'prelude-web-mode-defaults)
-
      (add-hook 'web-mode-hook (lambda ()
                                 (run-hooks 'prelude-web-mode-hook)))))
 
 ;;; Custom Code:
-
 (setq web-mode-enable-auto-closing t)
+(eval-after-load 'web-mode
+  '(define-key web-mode-map (kbd "C-c C-v") 'browse-url-of-buffer))
 
 (provide 'prelude-web)
 ;;; prelude-web.el ends here
