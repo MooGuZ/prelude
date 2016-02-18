@@ -29,15 +29,20 @@
 ;;; Code:
 
 (load-library "matlab-load")
-                                        ; Enable CEDET feature support for MATLAB code
-                                        ; (matlab-cedet-setup)
-                                        ; Matlab Shell
+;; setup matlab shell
 (add-to-list 'exec-path "/Applications/MATLAB_R2014a.app/bin/")
 (setq matlab-shell-command "matlab")
 (setq matlab-shell-command-switches '("-nodisplay"))
-                                        ; Matlab Mode
-(add-hook 'matlab-mode-hook
-          '(lambda()
-             (setq fill-column 87)))
+;; default settings
+(defun maltab-mode-default ()
+  "Apply default settings of matlab mode."
+  (turn-on-auto-fill)
+  (setq fill-column 120)
+  (linum-on)
+  (smartparens-mode t)
+  (smartparens-strict-mode t))
+;; attach to mode hook
+(add-hook 'matlab-mode-hook 'matlab-mode-default)
 
 (provide 'prelude-matlab)
+;;; prelude-matlab.el ends here
