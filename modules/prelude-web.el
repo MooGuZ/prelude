@@ -70,7 +70,9 @@
        (turn-on-auto-fill)              ; custom code
        (setq fill-column 87)
        (linum-on))
+
      (setq prelude-web-mode-hook 'prelude-web-mode-defaults)
+
      (add-hook 'web-mode-hook (lambda ()
                                 (run-hooks 'prelude-web-mode-hook)))))
 

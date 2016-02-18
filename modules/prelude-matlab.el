@@ -40,7 +40,8 @@
   (setq fill-column 120)
   (linum-on)
   (smartparens-mode t)
-  (smartparens-strict-mode t))
+  (smartparens-strict-mode t)
+  (yas-minor-mode))
 ;; attach to mode hook
 (add-hook 'matlab-mode-hook 'matlab-mode-default)
 
