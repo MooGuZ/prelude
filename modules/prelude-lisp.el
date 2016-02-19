@@ -60,9 +60,14 @@
 (setq prelude-interactive-lisp-coding-hook 'prelude-interactive-lisp-coding-defaults)
 
 ;; ------- CLisp -------
+;; Slime needs a common lisp interpreter to run. Here I use 'ccl', which can be
+;; download in binary version. Put the unzipped folder to wherever you want,
+;; then cp 'ccl64' to a path included in system search path, such as
+;; '/usr/local/bin'. Modify the script to let it point to your 'ccl' folder.
 (require 'slime)
 (setq inferior-lisp-program "/usr/local/bin/ccl")
-(setq slime-contribs '(slime-fancy))
+(slime-setup '(slime-fancy))
+
 
 (provide 'prelude-lisp)
 
