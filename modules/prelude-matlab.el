@@ -38,7 +38,7 @@
   "Apply default settings of matlab mode."
   (turn-on-auto-fill)
   (setq fill-column 120)
-  (linum-on)
+  (linum-mode +1)
   (smartparens-mode t)
   (smartparens-strict-mode t)
   (yas-minor-mode))
