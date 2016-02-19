@@ -102,7 +102,9 @@
 
 ;; initialize settings for MAKE-FRAME
 (defun initialize-frame-setting ()
-  "Initialize frame setting after window setup."
+  "Initialize frame setting after window setup in daemon mode.
+If startup Emacs in normal mode, new frame (F) would reset
+according to default setting."
   (setq display-info
     (car (display-monitor-attributes-list (car (last (terminal-list))))))
   (setq default-frame-left
@@ -118,14 +120,21 @@
   ;; 6. Consolas
   (setq default-frame-font
     (if (> (nth 3 (assoc 'geometry display-info)) 1920)
-        "Source Code Pro 16" "Menlo 14"))
+        "Menlo 16" "Menlo 14"))
   (add-to-list 'default-frame-alist (cons 'left   default-frame-left))
   (add-to-list 'default-frame-alist (cons 'top    default-frame-top))
   (add-to-list 'default-frame-alist (cons 'width  default-frame-width))
   (add-to-list 'default-frame-alist (cons 'height default-frame-height))
   (add-to-list 'default-frame-alist (cons 'font   default-frame-font))
-  (remove-hook 'before-make-frame-hook 'initialize-frame-setting))
-(add-hook 'before-make-frame-hook 'initialize-frame-setting)
+  (if (daemonp)
+      (remove-hook 'before-make-frame-hook 'initialize-frame-setting)
+    (progn
+      (modify-frame-parameters (selected-frame) default-frame-alist)
+      (remove-hook 'window-setup-hook 'initialize-frame-setting))))
+;; attach initialization process to a hook
+(if (daemonp)
+    (add-hook 'before-make-frame-hook 'initialize-frame-setting)
+  (add-hook 'window-setup-hook 'initialize-frame-setting))
 
 ;; update settings of MAKE-FRAME when close current frame
 (defun update-frame-setting (frame)
