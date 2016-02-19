@@ -1,0 +1,13 @@
+# -*- mode: snippet -*-
+# name: new-file
+# key: nf
+# expand-env: ((fname (file-name-nondirectory (file-name-sans-extension buffer-file-name))))
+# --
+% `(upcase fname)` $1
+%
+% MooGu Z. <hzhu@case.edu>
+% `(shell-command-to-string "echo -n $(date +'%b %d, %Y')")`
+
+${2:$$(yas-choose-value '("classdef" "function"))} $3
+$0
+end$4
