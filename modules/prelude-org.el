@@ -41,7 +41,8 @@
 (defun prelude-org-mode-defaults ()
   (let ((oldmap (cdr (assoc 'prelude-mode minor-mode-map-alist)))
         (newmap (make-sparse-keymap)))
-    (turn-on-auto-fill) ; custom code
+    (turn-on-auto-fill)                 ; Custom Code START
+    (setq fill-column 87)               ; Custom Code END
     (set-keymap-parent newmap oldmap)
     (define-key newmap (kbd "C-c +") nil)
     (define-key newmap (kbd "C-c -") nil)
@@ -57,9 +58,17 @@
 (setq org-log-mode 'time)
 (setq org-startup-indented t)
 (setq org-startup-truncated nil)
-(setq org-agenda-files (list "~/Dropbox/Record/general.org"
-                             "~/Dropbox/Record/research.org"
-                             "~/Dropbox/Record/dev.org"))
+;; setup org-mode folders and agenda files
+(setq org-directory "~/Dropbox/Record/")
+(setq org-agenda-files '("~/Dropbox/Record/general.org"
+                         "~/Dropbox/Record/research.org"
+                         "~/Dropbox/Record/dev.org"))
+;; support MobileOrg
+(setq org-mobile-inbox-for-pull (concat org-directory "inbox.org"))
+(setq org-mobile-directory "~/Dropbox/Apps/MobileOrg")
+;; setup shortcut for fetching and pushing to MobileOrg
+(define-key org-mode-map (kbd "C-c C-p") 'org-mobile-push)
+(define-key org-mode-map (kbd "C-c C-f") 'org-mobile-pull)
 
 (provide 'prelude-org)
 
