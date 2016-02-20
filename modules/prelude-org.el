@@ -67,8 +67,10 @@
 (setq org-mobile-inbox-for-pull (concat org-directory "inbox.org"))
 (setq org-mobile-directory "~/Dropbox/Apps/MobileOrg")
 ;; setup shortcut for fetching and pushing to MobileOrg
-(define-key org-mode-map (kbd "C-c C-p") 'org-mobile-push)
-(define-key org-mode-map (kbd "C-c C-f") 'org-mobile-pull)
+(add-hook 'org-mode-hook (lambda ()
+  (progn
+    (define-key org-mode-map (kbd "C-c C-p") 'org-mobile-push)
+    (define-key org-mode-map (kbd "C-c C-f") 'org-mobile-pull))))
 
 (provide 'prelude-org)
 
