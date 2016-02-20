@@ -1,0 +1,12 @@
+# -*- mode: snippet -*-
+# name: new-function
+# key: function
+# expand-env: ((fname (file-name-nondirectory (file-name-sans-extension buffer-file-name))))
+# --
+function $2 = `fname`($1)
+% `(upcase fname)` $3
+
+% MooGu Z. <hzhu@case.edu>
+% `(shell-command-to-string "echo -n $(date +'%b %d, %Y')")`
+
+$0
