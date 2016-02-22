@@ -1,4 +1,4 @@
-;;; yasnippet --- configuration
+;;; yasnippet-conf --- configuration
 
 ;;; Commentary:
 ;;  This configuration enable Emacs to use snippets.
@@ -18,4 +18,4 @@
     (define-key yas-minor-mode-map (kbd "TAB")   nil)
     (define-key yas-minor-mode-map (kbd "<tab>") nil)))
 
-;;; yasnippet.el ends here
+;;; yasnippet-conf.el ends here
