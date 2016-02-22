@@ -41,7 +41,8 @@
 (defun prelude-org-mode-defaults ()
   (let ((oldmap (cdr (assoc 'prelude-mode minor-mode-map-alist)))
         (newmap (make-sparse-keymap)))
-    (turn-on-auto-fill)                 ; Custom Code START
+    (yas-minor-mode)                    ; Custom Code START
+    (turn-on-auto-fill)
     (setq fill-column 87)               ; Custom Code END
     (set-keymap-parent newmap oldmap)
     (define-key newmap (kbd "C-c +") nil)
@@ -74,6 +75,10 @@
   (progn
     (define-key org-mode-map (kbd "C-c C-p") 'org-mobile-push)
     (define-key org-mode-map (kbd "C-c C-f") 'org-mobile-pull))))
+
+;; ob-ipython
+(setq org-confirm-babel-evaluate nil)
+(add-hook 'org-babel-after-execute-hook 'org-display-inline-images 'append)
 
 (provide 'prelude-org)
 
