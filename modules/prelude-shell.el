@@ -47,5 +47,35 @@
                      (member (file-name-nondirectory buffer-file-name) prelude-pretzo-files))
                 (sh-set-shell "zsh"))))
 
+;; Custom Code:
+
+;; set up shell environment
+(add-hook 'shell-mode-hook 'ansi-color-for-comint-mode-on)
+(add-to-list 'comint-output-filter-functions 'ansi-color-process-output)
+
+(defun delete-completion-window-buffer (&optional output)
+  "Help to close all auto-complete buffer after exceute the
+command. This is implemented by attach this function to the hook
+that triggered everytime to preprocess the system output before
+ndisplay it in the buffer.  This function would bypass the
+OUTPUT."
+  (interactive)
+  (dolist (win (window-list))
+    (when (string= (buffer-name (window-buffer win)) "*Completions*")
+      (delete-window win)
+      (kill-buffer "*Completions*")))
+  output)
+
+(add-hook 'comint-preoutput-filter-functions
+          'delete-completion-window-buffer)
+
+(defun clear-shell ()
+  (interactive)
+  (let ((comint-buffer-maximum-size 0))
+    (comint-truncate-buffer)))
+
+(eval-after-load 'shell
+  (define-key shell-mode-map (kbd "C-l") 'clear-shell))
+
 (provide 'prelude-shell)
 ;;; prelude-shell.el ends here
