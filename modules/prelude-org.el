@@ -66,8 +66,12 @@
                          "~/Dropbox/Record/research.org"
                          "~/Dropbox/Record/dev.org"))
 ;; open all notes in startup
-(mapcar 'find-file (directory-files org-directory t ".org$"))
-(switch-to-buffer "*scratch*")
+(defun open-notes ()
+  "Open all notes under my org-directory."
+  (interactive)
+  (defvar last-buffer (current-buffer))
+  (mapc 'find-file (directory-files org-directory t ".org$"))
+  (switch-to-buffer "*scratch*"))
 ;; support MobileOrg
 (setq org-mobile-inbox-for-pull (concat org-directory "inbox.org"))
 (setq org-mobile-directory "~/Dropbox/Apps/MobileOrg")
