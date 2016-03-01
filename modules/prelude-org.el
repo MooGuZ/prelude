@@ -42,6 +42,8 @@
   (let ((oldmap (cdr (assoc 'prelude-mode minor-mode-map-alist)))
         (newmap (make-sparse-keymap)))
     (yas-minor-mode)                    ; Custom Code START
+    (smartparens-mode t)
+    (smartparens-strict-mode t)
     (turn-on-auto-fill)
     (setq fill-column 87)               ; Custom Code END
     (set-keymap-parent newmap oldmap)
@@ -73,13 +75,13 @@
   (mapc 'find-file (directory-files org-directory t ".org$"))
   (switch-to-buffer "*scratch*"))
 ;; support MobileOrg
-(setq org-mobile-inbox-for-pull (concat org-directory "inbox.org"))
-(setq org-mobile-directory "~/Dropbox/Apps/MobileOrg")
+; (setq org-mobile-inbox-for-pull (concat org-directory "inbox.org"))
+; setq org-mobile-directory "~/Dropbox/Apps/MobileOrg")
 ;; setup shortcut for fetching and pushing to MobileOrg
-(add-hook 'org-mode-hook (lambda ()
-  (progn
-    (define-key org-mode-map (kbd "C-c C-p") 'org-mobile-push)
-    (define-key org-mode-map (kbd "C-c C-f") 'org-mobile-pull))))
+;  (add-hook 'org-mode-hook (lambda ()
+;   (progn
+;     (define-key org-mode-map (kbd "C-c C-p") 'org-mobile-push)
+;     (define-key org-mode-map (kbd "C-c C-f") 'org-mobile-pull))))
 
 ;; ob-ipython
 (setq org-confirm-babel-evaluate nil)
