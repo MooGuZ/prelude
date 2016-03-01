@@ -80,8 +80,9 @@
 ;;; Custom Code:
 (setq web-mode-enable-auto-closing t)
 (eval-after-load 'web-mode
-  '(define-key web-mode-map (kbd "C-c C-v") 'browse-url-of-buffer)
-  '(sp-local-pair 'web-mode "%" nil :actions nil))
+  '(progn
+     (define-key web-mode-map (kbd "C-c C-v") 'browse-url-of-buffer)
+     (sp-local-pair 'web-mode "%" nil :actions nil)))
 
 (provide 'prelude-web)
 ;;; prelude-web.el ends here
