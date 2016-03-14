@@ -71,14 +71,18 @@
   (defvar last-buffer (current-buffer))
   (mapcar 'find-file (directory-files org-directory t ".org$"))
   (switch-to-buffer last-buffer))
+
 ;; support MobileOrg
-(setq org-mobile-inbox-for-pull (concat org-directory "inbox.org"))
-(setq org-mobile-directory "~/Dropbox/Apps/MobileOrg")
+;; (setq org-mobile-inbox-for-pull (concat org-directory "inbox.org"))
+;; (setq org-mobile-directory "~/Dropbox/Apps/MobileOrg")
 ;; setup shortcut for fetching and pushing to MobileOrg
-(add-hook 'org-mode-hook (lambda ()
-  (progn
-    (define-key org-mode-map (kbd "C-c C-p") 'org-mobile-push)
-    (define-key org-mode-map (kbd "C-c C-f") 'org-mobile-pull))))
+;; (add-hook 'org-mode-hook (lambda ()
+;;   (progn
+;;     (define-key org-mode-map (kbd "C-c C-p") 'org-mobile-push)
+;;     (define-key org-mode-map (kbd "C-c C-f") 'org-mobile-pull))))
+
+;; set diary file
+(setq diary-file (concat org-directory "diary"))
 
 ;; ob-ipython
 (setq org-confirm-babel-evaluate nil)
