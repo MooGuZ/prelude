@@ -37,11 +37,10 @@
 (defun matlab-mode-default ()
   "Apply default settings of matlab mode."
   (turn-on-auto-fill)
-  (setq fill-column 120)
+  (setq fill-column 87)
   (linum-mode +1)
   (smartparens-mode t)
-  (smartparens-strict-mode t)
-  (yas-minor-mode))
+  (smartparens-strict-mode t))
 ;; attach to mode hook
 (add-hook 'matlab-mode-hook 'matlab-mode-default)
 

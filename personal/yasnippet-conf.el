@@ -9,11 +9,11 @@
 
 (require 'yasnippet)
 
-(add-hook 'prog-mode-hook 'yas-minor-mode)
+(yas-global-mode 1)
 
 (eval-after-load 'yasnippet
   (progn
-    (define-key yas-minor-mode-map [backtab]     'yas-expand)
+    (define-key yas-minor-mode-map (kbd "s-i")   'yas-expand)
     (define-key yas-minor-mode-map [(tab)]       nil)
     (define-key yas-minor-mode-map (kbd "TAB")   nil)
     (define-key yas-minor-mode-map (kbd "<tab>") nil)))

@@ -41,8 +41,7 @@
 (defun prelude-org-mode-defaults ()
   (let ((oldmap (cdr (assoc 'prelude-mode minor-mode-map-alist)))
         (newmap (make-sparse-keymap)))
-    (yas-minor-mode)                    ; Custom Code START
-    (turn-on-auto-fill)
+    (turn-on-auto-fill)                 ; Custom Code START
     (setq fill-column 87)               ; Custom Code END
     (set-keymap-parent newmap oldmap)
     (define-key newmap (kbd "C-c +") nil)
@@ -66,8 +65,12 @@
                          "~/Dropbox/Record/research.org"
                          "~/Dropbox/Record/dev.org"))
 ;; open all notes in startup
-(mapcar 'find-file (directory-files org-directory t ".org$"))
-(switch-to-buffer "*scratch*")
+(defun open-notes ()
+  "Open all notes for me at onece."
+  (interactive)
+  (defvar last-buffer (current-buffer))
+  (mapcar 'find-file (directory-files org-directory t ".org$"))
+  (switch-to-buffer last-buffer))
 ;; support MobileOrg
 (setq org-mobile-inbox-for-pull (concat org-directory "inbox.org"))
 (setq org-mobile-directory "~/Dropbox/Apps/MobileOrg")
