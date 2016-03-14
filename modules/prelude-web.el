@@ -69,7 +69,8 @@
      (defun prelude-web-mode-defaults ()
        (turn-on-auto-fill)              ; custom code
        (setq fill-column 87)
-       (linum-on))
+       (linum-on)
+       (setq-default web-mode-markup-indent-offset 2))
 
      (setq prelude-web-mode-hook 'prelude-web-mode-defaults)
 
@@ -79,7 +80,9 @@
 ;;; Custom Code:
 (setq web-mode-enable-auto-closing t)
 (eval-after-load 'web-mode
-  '(define-key web-mode-map (kbd "C-c C-v") 'browse-url-of-buffer))
+  '(progn
+     (define-key web-mode-map (kbd "C-c C-v") 'browse-url-of-buffer)
+     (sp-local-pair 'web-mode "%" nil :actions nil)))
 
 (provide 'prelude-web)
 ;;; prelude-web.el ends here

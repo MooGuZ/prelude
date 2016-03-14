@@ -143,7 +143,8 @@ according to default setting."
   (modify-alist default-frame-alist 'top    (frame-parameter frame 'top))
   (modify-alist default-frame-alist 'font   (frame-parameter frame 'font))
   (modify-alist default-frame-alist 'width  (frame-width frame))
-  (modify-alist default-frame-alist 'height (frame-height frame)))
+  (modify-alist default-frame-alist 'height (frame-height frame))
+  (frameset-to-register 47))
 (add-hook 'delete-frame-functions 'update-frame-setting)
 
 ;; recover frame setting if there are multiple monitors. In this case

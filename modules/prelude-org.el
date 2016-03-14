@@ -41,7 +41,8 @@
 (defun prelude-org-mode-defaults ()
   (let ((oldmap (cdr (assoc 'prelude-mode minor-mode-map-alist)))
         (newmap (make-sparse-keymap)))
-    (turn-on-auto-fill)                 ; Custom Code START
+    (smartparens-mode t)                ; Custom Code START
+    (turn-on-auto-fill)
     (setq fill-column 87)               ; Custom Code END
     (set-keymap-parent newmap oldmap)
     (define-key newmap (kbd "C-c +") nil)
@@ -69,7 +70,7 @@
   "Open all notes for me at onece."
   (interactive)
   (defvar last-buffer (current-buffer))
-  (mapcar 'find-file (directory-files org-directory t ".org$"))
+  (mapc 'find-file (directory-files org-directory t ".org$"))
   (switch-to-buffer last-buffer))
 
 ;; support MobileOrg
