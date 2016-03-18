@@ -174,5 +174,14 @@ according to default setting."
 (when (daemonp)
   (add-hook 'after-make-frame-functions 'recover-frame-setting))
 
+;; scrolling setting
+(setq mouse-wheel-scroll-amount '(1 ((shift) . 1)))
+(setq mouse-wheel-progressive-speed nil)
+(setq mouse-wheel-follow-mouse t)
+(setq scroll-step 1)
+;; use package [smooth-scrolling]
+(require 'smooth-scrolling)
+(smooth-scrolling-mode 1)
+
 (provide 'prelude-ui)
 ;;; prelude-ui.el ends here
