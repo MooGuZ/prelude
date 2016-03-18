@@ -93,6 +93,7 @@
 (defvar default-frame-width  83)
 (defvar default-frame-height 43)
 (defvar default-frame-font)
+(defvar latest-frame-config)
 
 ;; assistant function to modify associate list
 (defun modify-alist (alist id update)
@@ -144,8 +145,9 @@ according to default setting."
   (modify-alist default-frame-alist 'font   (frame-parameter frame 'font))
   (modify-alist default-frame-alist 'width  (frame-width frame))
   (modify-alist default-frame-alist 'height (frame-height frame))
-  (frameset-to-register 47))
-(add-hook 'delete-frame-functions 'update-frame-setting)
+  (setq latest-frame-config (frameset-save '(frame))))
+(when (daemonp)
+  (add-hook 'delete-frame-functions 'update-frame-setting))
 
 ;; recover frame setting if there are multiple monitors. In this case
 ;; if last frame didn't located in main monitor. 'make-frame' cannot
@@ -154,9 +156,11 @@ according to default setting."
   "Move FRAME to the position in default settings in case of multiple monitors."
   (when (or (listp (cdr (assoc 'top  default-frame-alist)))
             (listp (cdr (assoc 'left default-frame-alist))))
-    (modify-frame-parameters frame default-frame-alist)
-    (print "applied recover-frame-setting")))
-(add-hook 'after-make-frame-functions 'recover-frame-setting)
+    (modify-frame-parameters frame default-frame-alist))
+  (when (boundp 'latest-frame-config)
+    (frameset-restore latest-frame-config)))
+(when (daemonp)
+  (add-hook 'after-make-frame-functions 'recover-frame-setting))
 
 (provide 'prelude-ui)
 ;;; prelude-ui.el ends here
