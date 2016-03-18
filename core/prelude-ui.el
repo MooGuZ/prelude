@@ -144,7 +144,8 @@ according to default setting."
 ;; update settings of MAKE-FRAME when close current frame
 (defun update-frame-setting (frame)
   "Update settings of 'make-frame' by settings of FRAME."
-  (when frameset-save-enable
+  (when (and frameset-save-enable
+             (< (length (frame-list)) 3))
     ;; (modify-alist default-frame-alist 'left   (frame-parameter frame 'left))
     ;; (modify-alist default-frame-alist 'top    (frame-parameter frame 'top))
     ;; (modify-alist default-frame-alist 'font   (frame-parameter frame 'font))
