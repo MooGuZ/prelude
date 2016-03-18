@@ -93,7 +93,11 @@
 (defvar default-frame-width  83)
 (defvar default-frame-height 43)
 (defvar default-frame-font)
-(defvar latest-frame-config)
+;; setup variable for restoring frame configuration (windows)
+(defvar last-frameset nil)
+;; setup control variables
+(defvar frameset-restore-enable nil)
+(defvar frameset-save-enable  t)
 
 ;; assistant function to modify associate list
 (defun modify-alist (alist id update)
@@ -140,12 +144,14 @@ according to default setting."
 ;; update settings of MAKE-FRAME when close current frame
 (defun update-frame-setting (frame)
   "Update settings of 'make-frame' by settings of FRAME."
-  (modify-alist default-frame-alist 'left   (frame-parameter frame 'left))
-  (modify-alist default-frame-alist 'top    (frame-parameter frame 'top))
-  (modify-alist default-frame-alist 'font   (frame-parameter frame 'font))
-  (modify-alist default-frame-alist 'width  (frame-width frame))
-  (modify-alist default-frame-alist 'height (frame-height frame))
-  (setq latest-frame-config (frameset-save '(frame))))
+  (when frameset-save-enable
+    ;; (modify-alist default-frame-alist 'left   (frame-parameter frame 'left))
+    ;; (modify-alist default-frame-alist 'top    (frame-parameter frame 'top))
+    ;; (modify-alist default-frame-alist 'font   (frame-parameter frame 'font))
+    ;; (modify-alist default-frame-alist 'width  (frame-width frame))
+    ;; (modify-alist default-frame-alist 'height (frame-height frame))
+    (setq last-frameset (frameset-save (list frame)))
+    (setq frameset-restore-enable t)))
 (when (daemonp)
   (add-hook 'delete-frame-functions 'update-frame-setting))
 
@@ -154,11 +160,16 @@ according to default setting."
 ;; create a frame in the position according to the recorded setting.
 (defun recover-frame-setting (frame)
   "Move FRAME to the position in default settings in case of multiple monitors."
-  (when (or (listp (cdr (assoc 'top  default-frame-alist)))
-            (listp (cdr (assoc 'left default-frame-alist))))
-    (modify-frame-parameters frame default-frame-alist))
-  (when (boundp 'latest-frame-config)
-    (frameset-restore latest-frame-config)))
+  (when frameset-restore-enable
+    (setq frameset-restore-enable nil)
+    (frameset-restore last-frameset)
+    (setq frameset-save-enable nil)
+    (delete-frame frame)
+    (setq frameset-save-enable t))
+  ;; (when (or (listp (cdr (assoc 'top  default-frame-alist)))
+  ;;           (listp (cdr (assoc 'left default-frame-alist))))
+  ;;   (modify-frame-parameters frame default-frame-alist))
+  )
 (when (daemonp)
   (add-hook 'after-make-frame-functions 'recover-frame-setting))
 
