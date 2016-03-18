@@ -455,6 +455,13 @@ Without ARG interactive prompt would appear."
       (find-alternate-file (concat "/sudo:root@localhost:" buffer-file-name)))))
 (global-set-key (kbd "C-c C-w") 'sudo-edit)
 
+;; key binding of yank menu
+(when (or (daemonp)
+          (window-system))
+  (global-set-key
+   (kbd "C-x y")
+   '(lambda () (interactive) (popup-menu 'yank-menu))))
+
 (provide 'prelude-editor)
 
 ;;; prelude-editor.el ends here
