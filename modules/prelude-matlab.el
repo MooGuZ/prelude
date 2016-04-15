@@ -28,9 +28,16 @@
 
 ;;; Code:
 
+(prelude-require-packages '(matlab-mode))
+
 (load-library "matlab-load")
+;; find maltab executive folder
+(defconst matlab-exec-dir
+  (concat (file-name-as-directory
+           (car (directory-files "/Applications" t "[Mm][Aa][Tt][Ll][Aa][Bb]")))
+          "bin"))
 ;; setup matlab shell
-(add-to-list 'exec-path "/Applications/MATLAB_R2014a.app/bin/")
+(add-to-list 'exec-path matlab-exec-dir)
 (setq matlab-shell-command "matlab")
 (setq matlab-shell-command-switches '("-nodisplay"))
 ;; default settings
