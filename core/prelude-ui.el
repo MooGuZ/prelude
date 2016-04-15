@@ -174,6 +174,8 @@ according to default setting."
 (when (daemonp)
   (add-hook 'after-make-frame-functions 'recover-frame-setting))
 
+;; require smooth-scrolling package
+(prelude-require-package "smooth-scrolling")
 ;; scrolling setting
 (setq mouse-wheel-scroll-amount '(1 ((shift) . 1)))
 (setq mouse-wheel-progressive-speed t)

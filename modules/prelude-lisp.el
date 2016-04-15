@@ -59,15 +59,22 @@
 
 (setq prelude-interactive-lisp-coding-hook 'prelude-interactive-lisp-coding-defaults)
 
+(defun find-program (prog)
+  "Find location of program named PROG."
+  (replace-regexp-in-string
+   "[ \t\n]*$" ""
+   (shell-command-to-string (concat "which " prog))))
+
 ;; ------- CLisp -------
 ;; Slime needs a common lisp interpreter to run. Here I use 'ccl', which can be
 ;; download in binary version. Put the unzipped folder to wherever you want,
 ;; then cp 'ccl64' to a path included in system search path, such as
-;; '/usr/local/bin'. Modify the script to let it point to your 'ccl' folder.
+;; '/usr/local/bin'. Modify the script to let it point to your 'ccl'
+;; folder.
+(prelude-require-package "slime")
 (require 'slime)
-(setq inferior-lisp-program "/usr/local/bin/ccl")
+(setq inferior-lisp-program (find-program "ccl"))
 (slime-setup '(slime-fancy))
-
 
 (provide 'prelude-lisp)
 
