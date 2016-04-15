@@ -71,7 +71,7 @@
 ;; then cp 'ccl64' to a path included in system search path, such as
 ;; '/usr/local/bin'. Modify the script to let it point to your 'ccl'
 ;; folder.
-(prelude-require-package "slime")
+(prelude-require-package 'slime)
 (require 'slime)
 (setq inferior-lisp-program (find-program "ccl"))
 (slime-setup '(slime-fancy))
