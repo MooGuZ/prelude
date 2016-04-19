@@ -18,7 +18,7 @@ if [ $($ec -e "(length (frame-list))") -gt 1 ]; then
     if [ $# -eq 0 ]; then
         $ec -ne "(x-focus-frame nil)" > /dev/null 2>&1
     else
-        $ec -n $@
+        $ec -n "$*"
     fi
 else
     if [ $# -eq 0 ]; then
@@ -28,7 +28,7 @@ else
             $ec -ne "(recover-last-frameset)" > /dev/null 2>&1
         fi
     else
-        $ec -nc $@
+        $ec -nc "$*"
     fi
     $ec -n -e "(x-focus-frame nil)" > /dev/null 2>&1
 fi
