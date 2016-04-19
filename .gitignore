@@ -20,4 +20,5 @@ session*
 .cask
 tramp
 /var/pcache
+vendor/
 .org-id-locations
