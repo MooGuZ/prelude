@@ -95,9 +95,6 @@
 (defvar default-frame-font)
 ;; setup variable for restoring frame configuration (windows)
 (defvar last-frameset nil)
-;; setup control variables
-(defvar frameset-restore-enable nil)
-(defvar frameset-save-enable  t)
 
 ;; assistant function to modify associate list
 (defun modify-alist (alist id update)
@@ -144,35 +141,32 @@ according to default setting."
 ;; update settings of MAKE-FRAME when close current frame
 (defun update-frame-setting (frame)
   "Update settings of 'make-frame' by settings of FRAME."
-  (when (and frameset-save-enable
-             (< (length (frame-list)) 3))
-    ;; (modify-alist default-frame-alist 'left   (frame-parameter frame 'left))
-    ;; (modify-alist default-frame-alist 'top    (frame-parameter frame 'top))
-    ;; (modify-alist default-frame-alist 'font   (frame-parameter frame 'font))
-    ;; (modify-alist default-frame-alist 'width  (frame-width frame))
-    ;; (modify-alist default-frame-alist 'height (frame-height frame))
-    (setq last-frameset (frameset-save (list frame)))
-    (setq frameset-restore-enable t)))
+  (modify-alist default-frame-alist 'left   (frame-parameter frame 'left))
+  (modify-alist default-frame-alist 'top    (frame-parameter frame 'top))
+  (modify-alist default-frame-alist 'font   (frame-parameter frame 'font))
+  (modify-alist default-frame-alist 'width  (frame-width frame))
+  (modify-alist default-frame-alist 'height (frame-height frame))
+  (setq last-frameset (frameset-save (list frame))))
 (when (daemonp)
   (add-hook 'delete-frame-functions 'update-frame-setting))
 
 ;; recover frame setting if there are multiple monitors. In this case
 ;; if last frame didn't located in main monitor. 'make-frame' cannot
 ;; create a frame in the position according to the recorded setting.
-(defun recover-frame-setting (frame)
+(defun recover-frame-position-on-other-monitor (frame)
   "Move FRAME to the position in default settings in case of multiple monitors."
-  (when frameset-restore-enable
-    (setq frameset-restore-enable nil)
-    (frameset-restore last-frameset)
-    (setq frameset-save-enable nil)
-    (delete-frame frame)
-    (setq frameset-save-enable t))
-  ;; (when (or (listp (cdr (assoc 'top  default-frame-alist)))
-  ;;           (listp (cdr (assoc 'left default-frame-alist))))
-  ;;   (modify-frame-parameters frame default-frame-alist))
-  )
+  (when (or (listp (cdr (assoc 'top  default-frame-alist)))
+            (listp (cdr (assoc 'left default-frame-alist))))
+    (modify-frame-parameters frame default-frame-alist)))
+(defun recover-last-frameset ()
+  "Recover last frame configuration by making a new frame."
+  (if last-frameset
+      (frameset-restore last-frameset)
+    (make-frame default-frame-alist)
+    (print "Should made a frame now")))
 (when (daemonp)
-  (add-hook 'after-make-frame-functions 'recover-frame-setting))
+  (add-hook 'after-make-frame-functions
+            'recover-frame-position-on-other-monitor))
 
 ;; require smooth-scrolling package
 (prelude-require-package 'smooth-scrolling)

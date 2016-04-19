@@ -7,17 +7,28 @@ ec="/Applications/Emacs.app/Contents/MacOS/bin/emacsclient"
 # check existance of Emacs daemon, if not create one
 if [ $(ps -A | grep -c -e "Emacs\.app.*daemon") -le 0 ]; then
     $e --daemon > /dev/null 2>&1
+    init_proc=true
+else
+    init_proc=false
 fi
 
 # edit specified file by existing frames, if none exist
 # create a new one.
 if [ $($ec -e "(length (frame-list))") -gt 1 ]; then
     if [ $# -eq 0 ]; then
-        $ec -n -e "(x-focus-frame nil)" > /dev/null 2>&1
+        $ec -ne "(x-focus-frame nil)" > /dev/null 2>&1
     else
         $ec -n $@
     fi
 else
-    $ec -nc $@
+    if [ $# -eq 0 ]; then
+        if $init_proc; then
+            $ec -nc
+        else
+            $ec -ne "(recover-last-frameset)" > /dev/null 2>&1
+        fi
+    else
+        $ec -nc $@
+    fi
     $ec -n -e "(x-focus-frame nil)" > /dev/null 2>&1
 fi
