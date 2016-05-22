@@ -61,10 +61,12 @@
 (setq org-startup-truncated nil)
 ;; setup org-mode folders and agenda files
 (setq org-archive-location "%s.archive")
-(setq org-directory "~/Dropbox/Record/")
-(setq org-agenda-files '("~/Dropbox/Record/general.org"
-                         "~/Dropbox/Record/research.org"
-                         "~/Dropbox/Record/dev.org"))
+(setq org-directory "~/Dropbox/Apps/Emacs/Org/")
+;; (setq org-agenda-files '("~/Dropbox/Record/general.org"
+;;                          "~/Dropbox/Record/research.org"
+;;                          "~/Dropbox/Record/dev.org"))
+(setq org-agenda-files (mapcar (lambda (str) (concat org-directory str))
+                               '("general.org" "research.org" "dev.org")))
 ;; open all notes in startup
 (defun open-notes ()
   "Open all notes for me at onece."
